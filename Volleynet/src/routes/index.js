@@ -11,15 +11,19 @@ async function login(user) {
     const bool = await response.json()
     return bool;
 }
-
 async function registration(user) {
-    const response = await fetch(URL+'login', {
-    method: "PUSH",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: user
+
+    const response = await fetch(URL + 'login', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(user)
     });
 
-    return OK;
+    if(response.ok){
+        return true;
+    }else{
+        return false;
+    }
 }
