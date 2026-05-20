@@ -1,0 +1,21 @@
+{
+  "name": "wmcprojekt4csamuelkrempl",
+  "version": "1.0.0",
+  "description": "WMC Projekt",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Samuel07101/WmcProjekt4CSamuelKrempl.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Samuel07101/WmcProjekt4CSamuelKrempl/issues"
+  },
+  "homepage": "https://github.com/Samuel07101/WmcProjekt4CSamuelKrempl#readme"
+}
