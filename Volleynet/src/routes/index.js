@@ -13,7 +13,7 @@ async function login(user) {
 }
 
 async function registration(user) {
-    const response = await fetch(URL+'login', {
+    const response = await fetch(URL+'registration', {
     method: "POST",
     headers: {
         "Content-Type": "application/json"

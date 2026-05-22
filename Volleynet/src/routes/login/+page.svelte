@@ -39,27 +39,35 @@
 <h1>{btnText}</h1>
 
 {#if btnText === 'Login'}
-<input type="text" bind:value={email}>
-
-<input type="password" bind:value={password}>
+<div>
+Email: <input type="text" bind:value={email}>
+</div>
+<div>
+Password: <input type="password" bind:value={password}>
+</div>
 {:else}
-
-<input type="text" bind:value={fullName}>
-<select bind:value={country}>
+<div>
+Fullname: <input type="text" bind:value={fullName}>
+</div>
+<div>
+Country: <select bind:value={country}>
     {#each countries as ctry}
         <option value={ctry}>
             {ctry}
         </option>
     {/each}
 </select>
-
+</div>
+<div>
 <input type="date" bind:value={date}>
-
+</div>
+<div>
 <input type="text" bind:value={email}>
-
+</div>
+<div>
 <input type="password" bind:value={password}>
-
+</div>
 {/if}
 
-<button onclick={swap}>{swapText}</button>
+<button onclick={swap}>To {swapText}</button>
 <button onclick={loginOrRegistration()}>{btnText}</button>

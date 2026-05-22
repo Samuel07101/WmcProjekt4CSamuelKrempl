@@ -1,9 +1,8 @@
 <script>
-    import { goto } from "$app/navigation";
+    import { goto } from '$app/navigation';
+    import { onMount } from 'svelte';
 
-    function navigateTo(url){
-        goto(url);
-    }
-
-    navigateTo('http://localhost:5173/login');
+    onMount(() => {
+        goto('/login');
+    });
 </script>
