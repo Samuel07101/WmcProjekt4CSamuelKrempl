@@ -1,4 +1,6 @@
 <script>
+    import { goto } from "$app/navigation";
+
      
 
     let btnText = $state('Login');
@@ -12,10 +14,19 @@
     const countries = $state(['AT','DE','CH']);
     let date = $state();
     function loginOrRegistration(){
+        let ret;
         if(btnText == 'Login'){
             const user = {email: email, password: password};
-            login(user);
+             ret = login(user);
+            if(ret){
+               goto("/Volleynet/src/routes/home");
+            }else{
+                alert("Wrong Password or email please check!!");
+            }
+
         }else{
+            if(validateRegistration()){
+
             const user = {
             fullName: fullName,
             birthdate: birthdate,
@@ -24,8 +35,15 @@
             password: password
         };
 
-        register(user);
+         ret = register(user);
+        }  
         }
+
+        if(ret){
+               goto("/Volleynet/src/routes/home");
+            }else{
+                alert("Wrong Password or email please check!!");
+            }
     }
     function swap(){
         const placeholder = btnText;
@@ -34,6 +52,48 @@
 
         
     }
+
+    function validateRegistration(){
+
+    if(fullName.trim() === ""){
+        alert("Bitte Namen eingeben");
+        return false;
+    }
+
+    if(email.trim() === ""){
+        alert("Bitte E-Mail eingeben");
+        return false;
+    }
+
+    // einfache Email Prüfung
+    if(!email.includes("@")){
+        alert("Ungültige E-Mail");
+        return false;
+    }
+
+    if(password.trim() === ""){
+        alert("Bitte Passwort eingeben");
+        return false;
+    }
+
+    // Passwort Mindestlänge
+    if(password.length < 6){
+        alert("Passwort muss mindestens 6 Zeichen haben");
+        return false;
+    }
+
+    if(birthdate === ""){
+        alert("Bitte Geburtsdatum wählen");
+        return false;
+    }
+
+    if(country === ""){
+        alert("Bitte Land auswählen");
+        return false;
+    }
+
+    return true;
+}
 </script>
 
 <h1>{btnText}</h1>
