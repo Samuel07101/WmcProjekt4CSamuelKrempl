@@ -5,5 +5,5 @@
         goto(url);
     }
 
-    navigateTo('http://localhost:5173/login');
+    navigateTo('http://localhost:5173/home');
 </script>

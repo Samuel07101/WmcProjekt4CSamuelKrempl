@@ -1,2 +1,13 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<script>
+import Scorecomponent from "$lib/components/+Scorecomponent.svelte";
+
+</script>
+
+<h1>Home</h1>
+
+<Scorecomponent match=""></Scorecomponent>  
+<Scorecomponent match=""></Scorecomponent>
+
+<style>
+
+</style>

@@ -2,7 +2,7 @@ const URL = 'https://localhost:3000/'
 
 async function login(user) {
     const response = await fetch(URL+'login', {
-    method: "GET",
+    method: "POST",
     headers: {
         "Content-Type": "application/json"
     },
@@ -14,7 +14,7 @@ async function login(user) {
 
 async function registration(user) {
     const response = await fetch(URL+'login', {
-    method: "PUSH",
+    method: "POST",
     headers: {
         "Content-Type": "application/json"
     },

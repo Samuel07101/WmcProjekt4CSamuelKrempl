@@ -4,7 +4,7 @@
   "description": "WMC Projekt",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -13,9 +13,14 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/Samuel07101/WmcProjekt4CSamuelKrempl/issues"
   },
-  "homepage": "https://github.com/Samuel07101/WmcProjekt4CSamuelKrempl#readme"
+  "homepage": "https://github.com/Samuel07101/WmcProjekt4CSamuelKrempl#readme",
+  "dependencies": {
+    "better-sqlite3": "^12.10.0",
+    "cors": "^2.8.6",
+    "express": "^5.2.1"
+  }
 }
