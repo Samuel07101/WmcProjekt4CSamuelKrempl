@@ -21,5 +21,10 @@ async function registration(user) {
     body: user
     });
 
-    return OK;
+    
+    if(response.ok){
+        return true;
+    }else{
+        return false;
+    }
 }

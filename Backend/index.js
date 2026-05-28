@@ -4,6 +4,7 @@ import path from 'path'
 import fs from 'fs'
 import sqlite3 from "sqlite3";
 import { open } from "sqlite";
+import { log } from 'console';
 
 const app = express();
 const port = 3000;
@@ -41,9 +42,23 @@ await db.exec(`
     );
 `);
 
-const matchA = {teamA: "Sabo", teamAScore: "23|23|19", teamB: "Valo", teamBScore: "25|25|25"};
-const matchB = {teamA: "Sabo", teamAScore: "23|23|19", teamB: "Valo", teamBScore: "25|25|25"};
+await db.exec(`
+    INSERT INTO Matches (teamA, teamB, scoreA, scoreB) VALUES 
+    ('Sabo', 'Valo', '23|23|19', '25|25|25'),
+    ('Kuro', 'Shiro', '15|25|21', '25|18|23'),
+    ('Akuma', 'Tenshi', '25|25', '12|19'),
+    ('Sabo', 'Kuro', '22|25|14', '25|20|16');
+`);
 
+const matchesData = {
+ matchA : {teamA: "Sabo", teamAScore: "23|23|19", teamB: "Valo", teamBScore: "25|25|25"},
+ matchB : {teamA: "Sabo", teamAScore: "23|23|19", teamB: "Valo", teamBScore: "25|25|25"}
+}
+const newsData = [
+    "https://picsum.photos/id/10/600/350",
+    "https://picsum.photos/id/11/600/350",
+    "https://picsum.photos/id/12/600/350"
+];
 const users = [];
 
 app.post('/login', (req,res) => {
@@ -60,14 +75,18 @@ app.post('/login', (req,res) => {
 app.post('/registration', (req,res) => {
    const user = req.body.user;
    users.push(user);
-
+    console.log("User: "+user)
    return res.json(user);
 });
 
 app.get('/match/:week', (req,res) => {
     const next = req.query.week;
 
-    return res.json(matchA);
+    return res.json(matchesData);
+});
+
+app.get('/news', (req,res) => {
+    return res.json(newsData);
 });
 
 app.listen(port, () => {

@@ -1,4 +1,6 @@
 <script>
+    import { goto } from "$app/navigation";
+    
      
 
     let btnText = $state('Login');
@@ -12,9 +14,10 @@
     const countries = $state(['AT','DE','CH']);
     let date = $state();
     function loginOrRegistration(){
+        let ret = false;
         if(btnText == 'Login'){
             const user = {email: email, password: password};
-            login(user);
+            ret = login(user);
         }else{
             const user = {
             fullName: fullName,
@@ -24,8 +27,14 @@
             password: password
         };
 
-        register(user);
+        ret = register(user);
+
         }
+
+        if(ret){
+            goto('/home');
+        }
+
     }
     function swap(){
         const placeholder = btnText;
@@ -59,7 +68,7 @@ Country: <select bind:value={country}>
 </select>
 </div>
 <div>
-<input type="date" bind:value={date}>
+<input type="date" bind:value={birthdate}>
 </div>
 <div>
 <input type="text" bind:value={email}>
@@ -70,4 +79,4 @@ Country: <select bind:value={country}>
 {/if}
 
 <button onclick={swap}>To {swapText}</button>
-<button onclick={loginOrRegistration()}>{btnText}</button>
+<button onclick={loginOrRegistration}>{btnText}</button>
