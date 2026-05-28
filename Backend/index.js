@@ -59,24 +59,31 @@ const newsData = [
     "https://picsum.photos/id/11/600/350",
     "https://picsum.photos/id/12/600/350"
 ];
-const users = [];
 
 app.post('/login', (req,res) => {
     const user = req.body.user;
 
-    for(let i = 0;i < users.length;i++){
-        if(users[i].email == user.email && users[i].password == user.password){
-           return res.json(true)
-        }
-    }
+    const sql = `SELECT * FROM Users WHERE email == ? AND password == ?`;
+    db.run(sql,user.email,user.password);
     return res.json(false);
 });
 
 app.post('/registration', (req,res) => {
    const user = req.body.user;
-   users.push(user);
+   const sql = `
+            INSERT INTO Users (username, email, password, country, birthdate) 
+            VALUES (?, ?, ?, ?, ?)
+        `;
+
+        await db.run(sql, [
+            user.fullname, 
+            user.email, 
+            user.password, 
+            user.country, 
+            user.birthdate
+        ]);
     console.log("User: "+user)
-   return res.json(user);
+   return res.json({ success: true, message: "Registrierung erfolgreich!", user });
 });
 
 app.get('/match/:week', (req,res) => {
