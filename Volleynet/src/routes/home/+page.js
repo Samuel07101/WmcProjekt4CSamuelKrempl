@@ -1,9 +1,9 @@
-// +page.js
+
 /** @type {import('./$types').PageLoad} */
 export async function load({ fetch }) {
     
         const [matchesResponse, newsResponse] = await Promise.all([
-            fetch('http://localhost:3000/match/1'), // Beispiel für Woche 1
+            fetch('http://localhost:3000/match/1'), 
             fetch('http://localhost:3000/news')
         ]);
 

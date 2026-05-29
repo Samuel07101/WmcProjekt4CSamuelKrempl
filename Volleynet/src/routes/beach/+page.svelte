@@ -1,9 +1,16 @@
 <script>
-    import { goto } from "$app/navigation";
+    import Tournamentlistcomponent from "$lib/components/+Tournamentlistcomponent.svelte";
 
-    function navigateTo(url){
-        goto(url);
-    }
+   function showTournament(id,name){
+        
+   }
 
-    navigateTo('http://localhost:5173/home');
+   function reloadList(){
+
+   }
 </script>
+
+Turniername: <input type="text"/>
+
+<Tournamentlistcomponent data = "" />
+
