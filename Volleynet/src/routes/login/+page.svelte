@@ -1,9 +1,7 @@
 <script>
     import { goto } from "$app/navigation";
-    import { createUserInstance } from "..";
+    import { createUserInstance, userSession } from "..";
     
-     
-
     let btnText = $state('Login');
     let swapText = $state('Registration');
     let email = $state('');
@@ -32,8 +30,8 @@
 
         }
 
-        if(ret){
-            createUserInstance(user);
+        if(ret.id >= 0 ){
+            userSession.current = user;
             goto('/home');
         }
 

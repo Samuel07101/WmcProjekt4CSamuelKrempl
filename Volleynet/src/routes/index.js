@@ -28,14 +28,13 @@ async function registration(user) {
         return false;
     }
 }
-export const createUserInstance = (initialValue = null) => {
-    let user = $state(initialValue);
-    
+
+const User = () => {
+    let user = $state(null);
     return {
-        // Getter: Wird aufgerufen über instance.current
         get current() { return user; },
-        
-        // Setter: Erlaubt Zuweisung über instance.current = { name: 'Max' }
         set current(newUser) { user = newUser; }
     }
 }
+
+export const userSession = User();

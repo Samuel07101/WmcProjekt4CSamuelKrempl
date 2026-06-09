@@ -1,39 +1,39 @@
 <script>
-    
+    import { goto } from "$app/navigation";
+    import { createUserInstance, userSession } from "..";
+
 	let selectedLicence = $state('');
-	let selectedVerein = $state('');
+	let selectedClub = $state('');
+    let clubs = $state('');
+    let licences = $state('');
 
 	
-	const prices = {
-		'Standard': 15.00,
-		'Premium': 49.90,
-		'Professional': 99.00
-	};
 
 
 	let currentPrice = $derived(prices[selectedLicence] || 0.00);
 
 	function handleOrder() {
-		console.log('Bestellt:', { selectedLicence, selectedVerein, currentPrice });
+		
 	}
 </script>
 
+{#if userSession.current != null}
+    
 <div>
 		<label for="licence">Licencetype</label>
 		<select id="licence" bind:value={selectedLicence}>
-			<option value="" disabled selected>Select</option>
-			<option value="Standard">Standard</option>
-			<option value="Premium">Premium</option>
-			<option value="Professional">Professional</option>
+			{#each licences as licence}
+                <option value={licence.id}>{licence.name} / {licence.price}</option>
+            {/each}
 		</select>
 	</div>
 
 	<div>
 		<label for="verein">Verein</label>
-		<select id="verein" bind:value={selectedVerein}>
-			<option value="" disabled selected>Select</option>
-			<option value="Verein A">Verein A</option>
-			<option value="Verein B">Verein B</option>
+		<select id="verein" bind:value={selectedClub}>
+			{#each clubs as club}
+                <option value={club.id}>{club.name}</option>
+            {/each}
 		</select>
 	</div>
 
@@ -44,3 +44,8 @@
 	<button onclick={handleOrder}>
 		bestellen
 	</button>
+{:else}
+<h1>Please Login or Register before buying a Licence</h1>
+
+<button onclick={goto("/login")}>To Login</button>
+{/if}
