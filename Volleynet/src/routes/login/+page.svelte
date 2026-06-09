@@ -1,5 +1,6 @@
 <script>
     import { goto } from "$app/navigation";
+    import { createUserInstance } from "..";
     
      
 
@@ -32,6 +33,7 @@
         }
 
         if(ret){
+            createUserInstance(user);
             goto('/home');
         }
 
