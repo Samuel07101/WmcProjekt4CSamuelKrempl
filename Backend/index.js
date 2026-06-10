@@ -59,16 +59,21 @@ const newsData = [
     "https://picsum.photos/id/11/600/350",
     "https://picsum.photos/id/12/600/350"
 ];
-
-app.post('/login', (req,res) => {
+app.post('/login', async (req,res) => {
     const user = req.body.user;
+    const sql = `SELECT * FROM Users WHERE email = ? AND password = ?`;
 
-    const sql = `SELECT * FROM Users WHERE email == ? AND password == ?`;
-    db.run(sql,user.email,user.password);
-    return res.json(false);
+    // db.get gibt die gefundene Zeile zurück
+    const foundUser = await db.get(sql, [user.email, user.password]);
+
+    if (foundUser) {
+        return res.json({ success: true, user: foundUser });
+    } else {
+        return res.json({ success: false, message: "Falsche E-Mail oder Passwort" });
+    }
 });
 
-app.post('/registration', (req,res) => {
+app.post('/registration', async (req,res) => {
    const user = req.body.user;
    const sql = `
             INSERT INTO Users (username, email, password, country, birthdate) 
@@ -86,14 +91,38 @@ app.post('/registration', (req,res) => {
    return res.json({ success: true, message: "Registrierung erfolgreich!", user });
 });
 
-app.get('/match/:week', (req,res) => {
+app.get('/match/:week', async (req,res) => {
     const next = req.query.week;
 
     return res.json(matchesData);
 });
 
-app.get('/news', (req,res) => {
+app.get('/news', async (req,res) => {
     return res.json(newsData);
+});
+
+app.put('/user', async (req,res) => {
+    const user = req.body;
+    const sql = `
+            UPDATE Users 
+            SET username = ?, email = ?, password = ?, country = ?, birthdate = ?
+            WHERE id = ?
+        `;
+
+        const result = await db.run(sql, [
+            user.username, 
+            user.email,
+            user.password,
+            user.country,
+            user.birthdate,
+            user.id
+        ]);
+    
+        if (result.changes === 0) {
+            return res.status(404).json({ success: false, message: "Benutzer nicht gefunden." });
+        }
+
+        return res.json({ success: true, message: "Benutzer erfolgreich aktualisiert!",});
 });
 
 app.listen(port, () => {

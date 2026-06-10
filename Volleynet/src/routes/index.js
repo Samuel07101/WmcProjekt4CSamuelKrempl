@@ -6,10 +6,16 @@ async function login(user) {
     headers: {
         "Content-Type": "application/json"
     },
-    body: user
+    body: JSON.stringify(user)
     });
-    const bool = await response.json()
-    return bool;
+   const data = response.json();
+
+    if(data.ok){
+        userSession.current = data.user;
+        return true;
+    }else{
+        return false;
+    }
 }
 
 async function registration(user) {
@@ -18,11 +24,31 @@ async function registration(user) {
     headers: {
         "Content-Type": "application/json"
     },
-    body: user
+    body: JSON.stringify(user)
     });
 
-    
-    if(response.ok){
+    const data = response.json();
+
+    if(data.ok){
+        userSession.current = data.user;
+        return true;
+    }else{
+        return false;
+    }
+}
+
+async function editUser(user) {
+    const response = await fetch(URL+'user', {
+        method: 'PUT',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(user)
+
+    })
+    const data = response.json();
+    if(data.success){
+        userSession.current = user;
         return true;
     }else{
         return false;
