@@ -13,7 +13,11 @@
 	let currentPrice = $derived(prices[selectedLicence] || 0.00);
 
 	function handleOrder() {
-		
+		if(selectedLicence == null){
+			alert(i18n.t('error_null_licence_club')+'');
+		}
+
+		buyLicence(selectedLicence);
 	}
 </script>
 

@@ -32,28 +32,42 @@ await db.exec(`
     birthdate Date NOT NULL
     );
 `);
-
 await db.exec(`
-    CREATE TABLE IF NOT EXISTS Matches(
-    teamA VARCHAR2(10) NOT NULL,
-    teamB VARCHAR2(10) NOT NULL,
-    scoreA VARCHAR2(30) NOT NULL,
-    scoreB VARCHAR2(30) NOT NULL
+    CREATE TABLE IF NOT EXISTS Licences(
+        id      INTEGER PRIMARY KEY AUTOINCREMENT,
+        name    VARCHAR2(50) NOT NULL,
+        price   DECIMAL(10,2) NOT NULL
     );
 `);
 
 await db.exec(`
-    INSERT INTO Matches (teamA, teamB, scoreA, scoreB) VALUES 
-    ('Sabo', 'Valo', '23|23|19', '25|25|25'),
-    ('Kuro', 'Shiro', '15|25|21', '25|18|23'),
-    ('Akuma', 'Tenshi', '25|25', '12|19'),
-    ('Sabo', 'Kuro', '22|25|14', '25|20|16');
+    CREATE TABLE IF NOT EXISTS UserLicence(
+        id          INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id     INTEGER NOT NULL,
+        licence_id  INTEGER NOT NULL,
+        FOREIGN KEY (user_id)    REFERENCES Users(id),
+        FOREIGN KEY (licence_id) REFERENCES Licences(id)
+    );
+`);
+await db.exec(`
+    CREATE TABLE IF NOT EXISTS Matches(
+    id      INTEGER PRIMARY KEY AUTOINCREMENT,
+    teamA   VARCHAR2(10) NOT NULL,
+    teamB   VARCHAR2(10) NOT NULL,
+    scoreA  VARCHAR2(30) NOT NULL,
+    scoreB  VARCHAR2(30) NOT NULL,
+    date    DATE NOT NULL
+    );
 `);
 
-const matchesData = {
- matchA : {teamA: "Sabo", teamAScore: "23|23|19", teamB: "Valo", teamBScore: "25|25|25"},
- matchB : {teamA: "Sabo", teamAScore: "23|23|19", teamB: "Valo", teamBScore: "25|25|25"}
-}
+await db.exec(`
+    INSERT INTO Matches (teamA, teamB, scoreA, scoreB, date) VALUES 
+    ('Sabo',  'Valo',   '23|23|19', '25|25|25', '2025-01-07'),
+    ('Kuro',  'Shiro',  '15|25|21', '25|18|23', '2025-01-07'),
+    ('Akuma', 'Tenshi', '25|25',    '12|19',    '2025-01-14'),
+    ('Sabo',  'Kuro',   '22|25|14', '25|20|16', '2025-01-14');
+`);
+
 const newsData = [
     "https://picsum.photos/id/10/600/350",
     "https://picsum.photos/id/11/600/350",
@@ -62,8 +76,6 @@ const newsData = [
 app.post('/login', async (req,res) => {
     const user = req.body.user;
     const sql = `SELECT * FROM Users WHERE email = ? AND password = ?`;
-
-    // db.get gibt die gefundene Zeile zurück
     const foundUser = await db.get(sql, [user.email, user.password]);
 
     if (foundUser) {
@@ -91,10 +103,30 @@ app.post('/registration', async (req,res) => {
    return res.json({ success: true, message: "Registrierung erfolgreich!", user });
 });
 
-app.get('/match/:week', async (req,res) => {
-    const next = req.query.week;
+app.get('/match/:week', async (req, res) => {
+    const week = parseInt(req.params.week) || 1;
+    const offset = (week - 1) * 2;
 
-    return res.json(matchesData);
+    try {
+        const matches = await db.all(
+            `SELECT * FROM Matches LIMIT 2 OFFSET ?`,
+            [offset]
+        );
+
+        if (matches.length === 0) {
+            return res.status(404).json({ ok: false, message: 'Keine Spiele für diese Woche' });
+        }
+
+        return res.json({
+            ok: true,
+            matches: {
+                matchA: matches[0],
+                matchB: matches[1] ?? null
+            }
+        });
+    } catch (err) {
+        return res.status(500).json({ ok: false, message: err.message });
+    }
 });
 
 app.get('/news', async (req,res) => {
@@ -132,8 +164,22 @@ app.get('/tournament', (req,res) => {
     const result = await db.exec(sql, id);
 
     return res.json({ok = true,res = result });
-})
+});
+app.post('/licence', async (req, res) => {
+    const { user, licence } = req.body;
 
+    try {
+        await db.run(
+            `INSERT INTO UserLicence (user_id, licence_id, bought_at)
+             VALUES (?, ?, DATE('now'))`,
+            [user.id, licence.id]
+        );
+
+        res.status(201).json({ok: true});
+    } catch (err) {
+        res.status(500).json({ok: false});
+    }
+});
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

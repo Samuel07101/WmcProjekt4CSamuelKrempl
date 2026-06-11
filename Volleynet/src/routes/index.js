@@ -55,6 +55,17 @@ async function editUser(user) {
     }
 }
 
+async function buyLicence(licence) {
+    const res = await fetch('/licence', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            user: { id: userSession.current.id },
+            licence: { id: licence }
+        })
+    });
+}
+
 const User = () => {
     let user = $state(null);
     return {
