@@ -14,8 +14,8 @@
 <div class="app-layout">
     <nav class="header">
         <div class="logo-section">
-            <img src={favicon} alt="Logo" class="nav-logo" />
-            <span class="brand-name">TournamentHub</span>
+            
+            <span class="brand-name">Volleynet</span>
         </div>
         
         <div class="nav-links">
@@ -77,10 +77,7 @@
         gap: 10px;
     }
 
-    .nav-logo {
-        width: 28px;
-        height: 28px;
-    }
+    
 
     .brand-name {
         font-weight: 700;

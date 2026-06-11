@@ -61,6 +61,26 @@ await db.exec(`
 `);
 
 await db.exec(`
+    CREATE TABLE IF NOT EXISTS Tournaments (
+        id          INTEGER PRIMARY KEY AUTOINCREMENT,
+        name        TEXT NOT NULL,
+        place       TEXT NOT NULL,
+        price       REAL NOT NULL DEFAULT 0.0,
+        start_time  TEXT NOT NULL,
+        description TEXT,
+        picture     TEXT
+    );
+`);
+
+await db.exec(`
+    INSERT INTO Tournaments (name, place, price, start_time, description, picture) VALUES 
+    ('Grand Beach Open 2026', 'Wien, Donauinsel', 25.00, '2026-07-15 10:00', 'Das größte Beachvolleyball-Event des Sommers auf der Donauinsel.', 'https://example.com/logos/vienna.png'),
+    ('Masters Cup', 'Salzburg', 0.00, '2026-07-22 09:00', 'Ein hochklassiges Turnier für Profis und Amateure. Eintritt frei!', NULL),
+    ('Challenger Series', 'Graz', 15.00, '2026-08-05 11:30', 'Punkte sammeln für die Rangliste bei der Challenger Series.', 'https://example.com/logos/graz.png'),
+    ('Summer Slam', 'Klagenfurt', 30.00, '2026-08-19 08:00', 'Der legendäre Summer Slam am Wörthersee.', NULL);
+`);
+
+await db.exec(`
     INSERT INTO Matches (teamA, teamB, scoreA, scoreB, date) VALUES 
     ('Sabo',  'Valo',   '23|23|19', '25|25|25', '2025-01-07'),
     ('Kuro',  'Shiro',  '15|25|21', '25|18|23', '2025-01-07'),
@@ -69,9 +89,9 @@ await db.exec(`
 `);
 
 const newsData = [
-    "https://picsum.photos/id/10/600/350",
-    "https://picsum.photos/id/11/600/350",
-    "https://picsum.photos/id/12/600/350"
+    "https://volleyball-insider.com/wp-content/uploads/2026/06/deutschland-vnl-zdf-livestream-1024x577.jpg",
+    "https://www.volleynet.at/cms/wp-content/uploads/2025/06/2000.jpeg",
+    "https://sportsbusiness.at/wp-content/uploads/2024/01/oevv-volleyball-win2day-beach-volleyball-FOTO-%C3%A9-Gert-Nepel.jpg"
 ];
 app.post('/login', async (req,res) => {
     const user = req.body.user;
@@ -82,6 +102,44 @@ app.post('/login', async (req,res) => {
         return res.json({ success: true, user: foundUser });
     } else {
         return res.json({ success: false, message: "Falsche E-Mail oder Passwort" });
+    }
+});
+
+app.get('/tournaments', async (req, res) => {
+    const { search } = req.query;
+
+    try {
+        let tournaments;
+        if (search) {
+            const searchQuery = `%${search}%`;
+            tournaments = await db.all(
+                `SELECT * FROM Tournaments WHERE name LIKE ? OR place LIKE ?`,
+                [searchQuery, searchQuery]
+            );
+        } else {
+            tournaments = await db.all(`SELECT * FROM Tournaments`);
+        }
+
+        return res.json({ ok: true, tournaments });
+    } catch (err) {
+        return res.status(500).json({ ok: false, message: err.message });
+    }
+});
+
+// NEU: Ein einzelnes Turnier anhand seiner ID abrufen (z.B. /tournaments/1)
+app.get('/tournaments/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const tournament = await db.get(`SELECT * FROM Tournaments WHERE id = ?`, [id]);
+
+        if (!tournament) {
+            return res.status(404).json({ ok: false, message: 'Turnier nicht gefunden' });
+        }
+
+        return res.json({ ok: true, tournament });
+    } catch (err) {
+        return res.status(500).json({ ok: false, message: err.message });
     }
 });
 

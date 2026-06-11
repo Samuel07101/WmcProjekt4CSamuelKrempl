@@ -31,12 +31,11 @@
     <h1>{i18n.t('home_title')}</h1>
   </header>
  
-  {#if matches.matchA && matches.matchB}
     <section class="scores-section">
       <Scorecomponent match={matches.matchA} />
       <Scorecomponent match={matches.matchB} />
     </section>
-  {/if}
+  
  
   <section class="slider-section">
     <div class="slider-wrapper">

@@ -1,16 +1,14 @@
 <script>
-    const {match} = $props();
+    let {match} = $props();
     
 </script>
 
-<ul>  
-    <li>
-        {match.teamAName} {match.teamAScore}
-    </li>
-    <li>
-        <dir></dir>
-    </li>
-    <li>
-        {match.teamBName} {match.teamBScore}
-    </li>
-</ul>
+{#if match && match.teamA}
+    <div class="score-card">
+        <span class="team">{match.teamA}</span>
+        </div>
+{:else}
+    <div class="loading-placeholder">
+        <p>Lade Match-Daten...</p>
+    </div>
+{/if}

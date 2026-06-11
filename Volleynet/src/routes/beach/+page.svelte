@@ -3,13 +3,37 @@
     import Tournamentlistcomponent from "$lib/components/+Tournamentlistcomponent.svelte";
     import { i18n } from "$lib/i18n/index.svelte";
 
+    // Reaktive States für die Suche und die geladenen Turniere
+    let searchQuery = $state('');
+    let tournaments = $state([]);
+
     function showTournament(id, name) {
         goto(`/beach/tournament/${id}`);
     }
 
-    function reloadList() {
-        
+    // Holt die Daten von deinem Express-Backend (Port 3000)
+    async function reloadList(query) {
+        try {
+            const url = query 
+                ? `http://localhost:3000/tournaments?search=${encodeURIComponent(query)}`
+                : 'http://localhost:3000/tournaments';
+                
+            const response = await fetch(url);
+            const result = await response.json();
+            
+            if (result.ok) {
+                tournaments = result.tournaments;
+            }
+        } catch (error) {
+            console.error("Fehler beim Laden der Turniere:", error);
+        }
     }
+
+    // Svelte 5 Rune: Reagiert automatisch, sobald sich 'searchQuery' ändert
+    $effect(() => {
+        const currentQuery = searchQuery; // Synchroner Lesezugriff für das Dependency-Tracking
+        reloadList(currentQuery);
+    });
 </script>
 
 <div class="page-container">
@@ -21,6 +45,7 @@
             <input 
                 id="tournament-search" 
                 type="text" 
+                bind:value={searchQuery}
                 placeholder="Suchen..."
                 class="search-input"
             />
@@ -29,7 +54,7 @@
     </div>
 
     <main class="content-section">
-        <Tournamentlistcomponent data="" showTournament={showTournament} />
+        <Tournamentlistcomponent data={tournaments} showTournament={showTournament} />
     </main>
 </div>
 
