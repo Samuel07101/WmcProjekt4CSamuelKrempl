@@ -29,7 +29,7 @@ export async function registration(user) {
 
     const data = await response.json();
 
-    if (data.ok) {
+    if (data.success) {
         userSession.current = data.user;
         return true;
     } else {

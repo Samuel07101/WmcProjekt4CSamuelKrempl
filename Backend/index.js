@@ -144,7 +144,15 @@ app.get('/tournaments/:id', async (req, res) => {
 });
 
 app.post('/registration', async (req,res) => {
-   const user = req.body.user;
+    try{
+   const user = req.body.user || req.body;
+
+   if (!user || !user.fullname) {
+            return res.status(400).json({ 
+                success: false, 
+                message: "Registrierung fehlgeschlagen: Keine Benutzerdaten empfangen." 
+            });
+        }
    const sql = `
             INSERT INTO Users (username, email, password, country, birthdate) 
             VALUES (?, ?, ?, ?, ?)
@@ -159,6 +167,20 @@ app.post('/registration', async (req,res) => {
         ]);
     console.log("User: "+user)
    return res.json({ success: true, message: "Registrierung erfolgreich!", user });
+   } catch (error) {
+        console.error("Datenbankfehler bei Registration:", error);
+        
+        // HIER: Prüfen, ob der Fehler von der doppelten E-Mail kommt
+        if (error.message && error.message.includes("UNIQUE constraint failed: Users.email")) {
+            return res.status(400).json({ 
+                success: false, 
+                message: "Diese E-Mail-Adresse wird bereits verwendet." 
+            });
+        }
+
+        // Für alle anderen unerwarteten Fehler
+        return res.status(500).json({ success: false, message: "Server- oder Datenbankfehler." });
+    }
 });
 
 app.get('/match/:week', async (req, res) => {
