@@ -1,9 +1,10 @@
 <script>
     import { i18n } from '$lib/i18n/index.svelte.js';
 
-    let isEnglish = $derived.by({
-        get: () => i18n.locale === 'en',
-        set: (value) => { i18n.locale = value ? 'en' : 'de'; }
+    let isEnglish = $state(i18n.locale === 'en');
+
+    $effect(() => {
+        i18n.locale = isEnglish ? 'en' : 'de';
     });
 </script>
 

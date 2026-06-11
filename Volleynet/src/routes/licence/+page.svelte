@@ -1,6 +1,7 @@
 <script>
     import { goto } from "$app/navigation";
-    import { createUserInstance, userSession } from "..";
+    import { userSession } from "..";
+    import { i18n } from "$lib/i18n/index.svelte";
 
     let selectedLicence = $state('');
     let selectedClub = $state('');
