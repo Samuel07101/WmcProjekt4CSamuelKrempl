@@ -1,14 +1,15 @@
 <script>
     import { goto } from "$app/navigation";
+    import { userSession } from "..";
 
-    const {profile} = $props();
+    const profile = $state(userSession.current);
 
     function toLogin(){
         goto("/src/routes/login")
     }
 
     function saveChangesOfProfile(){
-
+        
     }
 </script>
 {#if profile != null}

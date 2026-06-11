@@ -1,5 +1,6 @@
 <script>
-    const { tournament } = $props();
+    const { data } = $props();
+    const tournament = $state(data.tournament);
 </script>
 
 Turniername: {tournament.name}

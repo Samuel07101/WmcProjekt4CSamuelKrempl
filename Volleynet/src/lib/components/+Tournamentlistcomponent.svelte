@@ -19,7 +19,7 @@
 </li>
 
 <style>
-   
+
     .tournament-box {
         cursor: pointer;
         list-style-type: none;

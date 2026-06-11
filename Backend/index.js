@@ -125,6 +125,15 @@ app.put('/user', async (req,res) => {
         return res.json({ success: true, message: "Benutzer erfolgreich aktualisiert!",});
 });
 
+app.get('/tournament', (req,res) => {
+    const id = req.body;
+    const sql = `Select * from tournaments where Id == ?`;
+
+    const result = await db.exec(sql, id);
+
+    return res.json({ok = true,res = result });
+})
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
