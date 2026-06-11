@@ -1,7 +1,7 @@
 <script>
     import favicon from '$lib/assets/favicon.svg';
     import { i18n } from '$lib/i18n/index.svelte';
-    import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte'; // Pfad ggf. anpassen
+    
     import { page } from '$app/stores';
 
     let { children } = $props();
@@ -33,9 +33,6 @@
             </a>
         </div>
 
-        <div class="settings-section">
-            <LanguageSwitcher />
-        </div>
     </nav>
 
     <main class="main-content">
@@ -118,11 +115,6 @@
         color: #3b82f6;
         background-color: #eff6ff;
         font-weight: 600;
-    }
-
-    .settings-section {
-        display: flex;
-        align-items: center;
     }
 
     .main-content {
