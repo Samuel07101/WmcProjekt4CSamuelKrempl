@@ -1,8 +1,8 @@
 <script>
     import { goto } from '$app/navigation';
-    import { userSession } from '..';
+    import { userSession, registration,login} from '..';
     import { i18n } from '$lib/i18n/index.svelte.js';
-
+  
     let isLogin = $state(true);
 
     let email = $state('');
@@ -11,19 +11,19 @@
     let birthdate = $state('');
     let country = $state('AT');
     const countries = $state(['AT', 'DE', 'CH']);
+    
+async function loginOrRegistration() {
+        let success = false;
 
-    function loginOrRegistration() {
-        let ret = false;
         if (isLogin) {
             const user = { email, password };
-            ret = login(user);
+            success = await login(user);
         } else {
-            const user = { fullName, birthdate, country, email, password };
-            ret = register(user);
+            const user = { fullname: fullName, birthdate, country, email, password };
+            success = await registration(user);
         }
 
-        if (ret.id >= 0) {
-            userSession.current = user;
+        if (success) {
             goto('/home');
         }
     }

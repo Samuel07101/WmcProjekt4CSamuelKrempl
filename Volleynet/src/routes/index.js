@@ -1,61 +1,60 @@
-const URL = 'https://localhost:3000/'
+const URL = 'http://localhost:3000/';
 
-async function login(user) {
-    const response = await fetch(URL+'login', {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify(user)
+export async function login(user) {
+    const response = await fetch(URL + 'login', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(user)
     });
-   const data = response.json();
+    const data = await response.json();
 
-    if(data.ok){
+    if (data.ok) {
         userSession.current = data.user;
         return true;
-    }else{
+    } else {
         return false;
     }
 }
 
-async function registration(user) {
-    const response = await fetch(URL+'registration', {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify(user)
+export async function registration(user) {
+    const response = await fetch(URL + 'registration', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(user)
     });
 
-    const data = response.json();
+    const data = await response.json();
 
-    if(data.ok){
+    if (data.ok) {
         userSession.current = data.user;
         return true;
-    }else{
+    } else {
         return false;
     }
 }
 
-async function editUser(user) {
-    const response = await fetch(URL+'user', {
+export async function editUser(user) {
+    const response = await fetch(URL + 'user', {
         method: 'PUT',
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(user)
-
-    })
-    const data = response.json();
-    if(data.success){
+    });
+    const data = await response.json();
+    if (data.success) {
         userSession.current = user;
         return true;
-    }else{
+    } else {
         return false;
     }
 }
 
-async function buyLicence(licence) {
+export async function buyLicence(licence) {
     const res = await fetch('/licence', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -70,7 +69,6 @@ async function buyLicence(licence) {
         console.error('Fehler beim Kauf:', error);
         return;
     }
-
 }
 
 const User = () => {
