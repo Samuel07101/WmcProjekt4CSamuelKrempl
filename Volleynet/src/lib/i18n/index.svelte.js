@@ -1,5 +1,5 @@
 
-import { en, de } from './translations.js';
+import { en, de } from '$lib/i18n/translations.js';
 
 const translations = { en, de };
 

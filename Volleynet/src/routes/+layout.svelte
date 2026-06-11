@@ -14,9 +14,9 @@
 <nav class="header">
 	<p></p>
 	<a href="/home">{i18n.t('nav_home')}</a>
-	<a href="/warenkorb">{i18n.t('nav_licence')}</a>
+	<a href="/licence">{i18n.t('nav_licence')}</a>
 	<a href="/beach">{i18n.t('nav_beach')}</a>
-	<a href="/news">{i18n.t('nav_news')}</a>
+	
 	<a href="/profile">{i18n.t('nav_profile')}</a>
 </nav>
 

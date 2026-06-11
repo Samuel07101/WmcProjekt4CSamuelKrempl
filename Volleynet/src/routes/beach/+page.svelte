@@ -3,8 +3,7 @@
     import Tournamentlistcomponent from "$lib/components/+Tournamentlistcomponent.svelte";
     import { i18n } from "$lib/i18n/index.svelte";
    function showTournament(id,name){
-        
-        goto("/src/routes/beach/tournament");
+        goto("/src/routes/beach/tournament{id}");
    }
 
    function reloadList(){

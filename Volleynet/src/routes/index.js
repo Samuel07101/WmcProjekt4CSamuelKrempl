@@ -64,7 +64,7 @@ async function buyLicence(licence) {
             licence: { id: licence }
         })
     });
-    
+
     if (!res.ok) {
         const { error } = await res.json();
         console.error('Fehler beim Kauf:', error);
@@ -74,7 +74,7 @@ async function buyLicence(licence) {
 }
 
 const User = () => {
-    let user = $state(null);
+    let user = null;
     return {
         get current() { return user; },
         set current(newUser) { user = newUser; }

@@ -3,6 +3,7 @@
 	import { userSession } from '..';
 	import { i18n } from '$lib/i18n/index.svelte.js';
  
+    if(userSession )
 	const profile = $state(userSession.current);
  
 	function toLogin() {
