@@ -38,14 +38,13 @@
 	</div>
 
 	<div>
-		Price: {currentPrice.toFixed(2)}€
+		{i18n.t('licence_price')}: {currentPrice.toFixed(2)}€
 	</div>
 
 	<button onclick={handleOrder}>
 		bestellen
 	</button>
-{:else}
-<h1>Please Login or Register before buying a Licence</h1>
+{:else}<h1>{i18n.t('licence_login_required')}</h1>
 
 <button onclick={goto("/login")}>To Login</button>
 {/if}

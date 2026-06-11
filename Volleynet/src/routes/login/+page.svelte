@@ -1,82 +1,73 @@
 <script>
-    import { goto } from "$app/navigation";
-    import { createUserInstance, userSession } from "..";
-    
-    let btnText = $state('Login');
-    let swapText = $state('Registration');
-    let email = $state('');
-    let password = $state('');
+    import { goto } from '$app/navigation';
+	import { createUserInstance, userSession } from '..';
+	import { i18n } from '$lib/i18n/index.svelte.js';
 
-    let fullName = $state('');
-    let birthdate = $state('');
-    let country = $state('AT')
-    const countries = $state(['AT','DE','CH']);
-    let date = $state();
-    function loginOrRegistration(){
-        let ret = false;
-        if(btnText == 'Login'){
-            const user = {email: email, password: password};
-            ret = login(user);
-        }else{
-            const user = {
-            fullName: fullName,
-            birthdate: birthdate,
-            country: country,
-            email: email,
-            password: password
-        };
+	let isLogin = $state(true);
 
-        ret = register(user);
+	let email = $state('');
+	let password = $state('');
+	let fullName = $state('');
+	let birthdate = $state('');
+	let country = $state('AT');
+	const countries = $state(['AT', 'DE', 'CH']);
 
-        }
+	function loginOrRegistration() {
+		let ret = false;
+		if (isLogin) {
+			const user = { email, password };
+			ret = login(user);
+		} else {
+			const user = { fullName, birthdate, country, email, password };
+			ret = register(user);
+		}
 
-        if(ret.id >= 0 ){
-            userSession.current = user;
-            goto('/home');
-        }
+		if (ret.id >= 0) {
+			userSession.current = user;
+			goto('/home');
+		}
+	}
 
-    }
-    function swap(){
-        const placeholder = btnText;
-        btnText = swapText;
-        swapText = placeholder;
-
-        
-    }
+	function swap() {
+		isLogin = !isLogin;
+	}
 </script>
 
-<h1>{btnText}</h1>
+<h1>{isLogin ? i18n.t('login_title') : i18n.t('register_title')}</h1>
 
-{#if btnText === 'Login'}
-<div>
-Email: <input type="text" bind:value={email}>
-</div>
-<div>
-Password: <input type="password" bind:value={password}>
-</div>
+{#if isLogin}
+	<div>
+		{i18n.t('login_email')}: <input type="text" bind:value={email} />
+	</div>
+	<div>
+		{i18n.t('login_password')}: <input type="password" bind:value={password} />
+	</div>
 {:else}
-<div>
-Fullname: <input type="text" bind:value={fullName}>
-</div>
-<div>
-Country: <select bind:value={country}>
-    {#each countries as ctry}
-        <option value={ctry}>
-            {ctry}
-        </option>
-    {/each}
-</select>
-</div>
-<div>
-<input type="date" bind:value={birthdate}>
-</div>
-<div>
-<input type="text" bind:value={email}>
-</div>
-<div>
-<input type="password" bind:value={password}>
-</div>
+	<div>
+		{i18n.t('login_fullname')}: <input type="text" bind:value={fullName} />
+	</div>
+	<div>
+		{i18n.t('login_country')}:
+		<select bind:value={country}>
+			{#each countries as ctry}
+				<option value={ctry}>{ctry}</option>
+			{/each}
+		</select>
+	</div>
+	<div>
+		<input type="date" bind:value={birthdate} />
+	</div>
+	<div>
+		{i18n.t('login_email')}: <input type="text" bind:value={email} />
+	</div>
+	<div>
+		{i18n.t('login_password')}: <input type="password" bind:value={password} />
+	</div>
 {/if}
 
-<button onclick={swap}>To {swapText}</button>
-<button onclick={loginOrRegistration}>{btnText}</button>
+<button onclick={swap}>
+	{isLogin ? i18n.t('login_switch_to_register') : i18n.t('login_switch_to_login')}
+</button>
+<button onclick={loginOrRegistration}>
+	{isLogin ? i18n.t('login_btn') : i18n.t('register_btn')}
+</button>
