@@ -64,6 +64,13 @@ async function buyLicence(licence) {
             licence: { id: licence }
         })
     });
+    
+    if (!res.ok) {
+        const { error } = await res.json();
+        console.error('Fehler beim Kauf:', error);
+        return;
+    }
+
 }
 
 const User = () => {

@@ -157,14 +157,23 @@ app.put('/user', async (req,res) => {
         return res.json({ success: true, message: "Benutzer erfolgreich aktualisiert!",});
 });
 
-app.get('/tournament', (req,res) => {
-    const id = req.body;
-    const sql = `Select * from tournaments where Id == ?`;
+app.get('/tournament', async (req, res) => {
+    const { id } = req.query;
+    const sql = `SELECT * FROM Matches WHERE id = ?`;
 
-    const result = await db.exec(sql, id);
+    try {
+        const result = await db.get(sql, [id]);
 
-    return res.json({ok = true,res = result });
+        if (!result) {
+            return res.status(404).json({ ok: false, message: 'Turnier nicht gefunden' });
+        }
+
+        return res.json({ ok: true, result });
+    } catch (err) {
+        return res.status(500).json({ ok: false, message: err.message });
+    }
 });
+
 app.post('/licence', async (req, res) => {
     const { user, licence } = req.body;
 
