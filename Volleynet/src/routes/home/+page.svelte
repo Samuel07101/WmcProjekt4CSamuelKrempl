@@ -5,6 +5,7 @@
   let { data } = $props();
  
   const matches = $derived(data?.matches ?? {});
+  console.log(matches);
   const news = $derived(data?.news ?? []);
  
   let currentIndex = $state(0);
@@ -32,8 +33,8 @@
   </header>
  
     <section class="scores-section">
-      <Scorecomponent match={matches.matchA} />
-      <Scorecomponent match={matches.matchB} />
+      <div><Scorecomponent match={matches.matchA} /></div>
+      <div><Scorecomponent match={matches.matchB} /></div>
     </section>
   
  
@@ -85,10 +86,10 @@
   }
  
   .scores-section {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-  }
+  display: grid;
+  grid-template-columns: 1fr 1fr; 
+  gap: 20px;
+}
  
   .slider-section {
     width: 100%;

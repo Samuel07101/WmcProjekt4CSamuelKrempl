@@ -11,11 +11,12 @@ export async function load({ fetch }) {
             throw new Error('Fehler beim Laden der Daten vom Server');
         }
 
-        const matches = await matchesResponse.json();
+        const json = await matchesResponse.json();
         const news = await newsResponse.json();
-
+        console.log("matches komplett:", JSON.stringify(json));
+        json.matches
         return {
-            matches,
+            matches: json.matches,
             news
         };
     
